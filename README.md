@@ -71,13 +71,6 @@
 
 ---
 
-## 👨‍💼 Autor
-
-> Desenvolvido por **Victo Hugo**  
-> Projeto MotoGo 🚖
-
----
-
 ## 🔧 Dependências Principais
 
 - `expo` `^53.0.0`
@@ -89,3 +82,8 @@
 - `react-native-gesture-handler`
 
 ---
+
+## 👨‍💼 Autor
+
+> Desenvolvido por **Victo Hugo**  
+> Projeto MotoGo 🚖
