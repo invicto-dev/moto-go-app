@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MapPin, Phone, MessageSquare, Star, Navigation, Clock } from 'lucide-react-native';
+import { colors } from '@/constains/colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -95,7 +96,7 @@ export default function TrackingScreen() {
       case 'found':
         return '#10b981';
       case 'pickup':
-        return '#2563eb';
+        return colors.primary;
       case 'ongoing':
         return '#8b5cf6';
       case 'completed':
@@ -149,7 +150,7 @@ export default function TrackingScreen() {
       {/* Mapa de Rastreamento */}
       <View style={styles.mapContainer}>
         <View style={styles.mapPlaceholder}>
-          <Navigation size={60} color="#2563eb" />
+          <Navigation size={60} color={colors.primary} />
           <Text style={styles.mapTitle}>Rastreamento em Tempo Real</Text>
           <Text style={styles.mapSubtitle}>
             {rideStatus.status === 'ongoing' ? 'Você está a caminho!' : 'Localização atualizada'}
@@ -185,10 +186,10 @@ export default function TrackingScreen() {
             </View>
             <View style={styles.driverActions}>
               <TouchableOpacity style={styles.actionButton}>
-                <Phone size={20} color="#2563eb" />
+                <Phone size={20} color={colors.primary} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton}>
-                <MessageSquare size={20} color="#2563eb" />
+                <MessageSquare size={20} color={colors.primary} />
               </TouchableOpacity>
             </View>
           </View>
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   plateText: {
     fontFamily: 'Inter-Bold',
     fontSize: 16,
-    color: '#2563eb',
+    color: colors.primary,
   },
   tripInfo: {
     backgroundColor: '#ffffff',

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { User, CreditCard, MapPin, Bell, Shield, CircleHelp as HelpCircle, Settings, LogOut, ChevronRight, Star, Gift, Users } from 'lucide-react-native';
+import { colors } from '@/constains/colors';
 
 interface UserProfile {
   name: string;
@@ -145,7 +146,7 @@ export default function ProfileScreen() {
         ]}>
           <item.icon 
             size={20} 
-            color={item.isDestructive ? '#ef4444' : '#2563eb'} 
+            color={item.isDestructive ? '#ef4444' : colors.primary} 
           />
         </View>
         <View style={styles.menuItemContent}>
@@ -163,7 +164,7 @@ export default function ProfileScreen() {
           <Switch
             value={item.switchValue}
             onValueChange={item.onSwitchChange}
-            trackColor={{ false: '#e2e8f0', true: '#2563eb' }}
+            trackColor={{ false: '#e2e8f0', true: colors.primary }}
             thumbColor={'#ffffff'}
           />
         ) : (
@@ -180,7 +181,7 @@ export default function ProfileScreen() {
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
-              <User size={40} color="#2563eb" />
+              <User size={40} color={colors.primary} />
             </View>
             {userProfile.verified && (
               <View style={styles.verifiedBadge}>

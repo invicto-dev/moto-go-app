@@ -1,3 +1,4 @@
+import { colors } from '@/constains/colors';
 import { Tabs } from 'expo-router';
 import { Chrome as Home, Clock, User, MapPin } from 'lucide-react-native';
 
@@ -14,7 +15,7 @@ export default function TabLayout() {
           paddingTop: 8,
           height: 80,
         },
-        tabBarActiveTintColor: '#2563eb',
+        tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: '#64748b',
         tabBarLabelStyle: {
           fontFamily: 'Inter-Medium',

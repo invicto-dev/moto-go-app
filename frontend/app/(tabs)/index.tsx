@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MapPin, Navigation, Clock, CreditCard } from 'lucide-react-native';
+import { colors } from '@/constains/colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -84,8 +85,8 @@ export default function HomeScreen() {
         {/* Mapa Simulado */}
         <View style={styles.mapContainer}>
           <View style={styles.mapPlaceholder}>
-            <Navigation size={40} color="#2563eb" />
-            <Text style={styles.mapText}>Mapa de São Paulo</Text>
+            <Navigation size={40} color={colors.primary} />
+            <Text style={styles.mapText}>Mapa de Oriximiná</Text>
             <Text style={styles.mapSubtext}>Localização atual detectada</Text>
           </View>
         </View>
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   rideTypeCardActive: {
-    borderColor: '#2563eb',
+    borderColor: colors.primary,
     backgroundColor: '#eff6ff',
   },
   rideTypeInfo: {
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
   rideTypePrice: {
     fontFamily: 'Inter-Bold',
     fontSize: 18,
-    color: '#2563eb',
+    color: colors.primary,
   },
   rideTypeTime: {
     fontFamily: 'Inter-Regular',
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   paymentMethodActive: {
-    borderColor: '#2563eb',
+    borderColor: colors.primary,
     backgroundColor: '#eff6ff',
   },
   paymentIcon: {
@@ -348,13 +349,13 @@ const styles = StyleSheet.create({
     color: '#1e293b',
   },
   requestButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginTop: 12,
     elevation: 4,
-    shadowColor: '#2563eb',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
