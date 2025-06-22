@@ -3,7 +3,7 @@
 Clone o projeto:
 
 ```bash
-git clone https://github.com/seu-usuario/moto-go.git
+git clone https://github.com/invicto-dev/moto-go-app.git
 cd frontend
 ```
 
