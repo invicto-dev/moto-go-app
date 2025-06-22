@@ -9,8 +9,21 @@ import {
   Switch,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { User, CreditCard, MapPin, Bell, Shield, CircleHelp as HelpCircle, Settings, LogOut, ChevronRight, Star, Gift, Users } from 'lucide-react-native';
-import { colors } from '@/constains/colors';
+import {
+  User,
+  CreditCard,
+  MapPin,
+  Bell,
+  Shield,
+  CircleHelp as HelpCircle,
+  Settings,
+  LogOut,
+  ChevronRight,
+  Star,
+  Gift,
+  Users,
+} from 'lucide-react-native';
+import { theme } from '@/assets/theme';
 
 interface UserProfile {
   name: string;
@@ -23,6 +36,9 @@ interface UserProfile {
 }
 
 export default function ProfileScreen() {
+  // obter versão do package.json
+  const packageJson = require('../../package.json');
+
   const [notifications, setNotifications] = useState(true);
   const [locationServices, setLocationServices] = useState(true);
 
@@ -44,19 +60,22 @@ export default function ProfileScreen() {
           icon: User,
           title: 'Editar Perfil',
           subtitle: 'Nome, email e telefone',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
         {
           icon: CreditCard,
           title: 'Pagamentos',
           subtitle: 'Cartões e métodos de pagamento',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
         {
           icon: MapPin,
           title: 'Endereços Salvos',
           subtitle: 'Casa, trabalho e favoritos',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
       ],
     },
@@ -75,14 +94,16 @@ export default function ProfileScreen() {
           icon: Shield,
           title: 'Privacidade',
           subtitle: 'Dados e permissões',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
         {
           icon: Settings,
           title: 'Configurações',
           subtitle: 'App e preferências gerais',
           hasSwitch: false,
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
       ],
     },
@@ -93,13 +114,15 @@ export default function ProfileScreen() {
           icon: Gift,
           title: 'Promoções',
           subtitle: 'Cupons e ofertas especiais',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
         {
           icon: Users,
           title: 'Indique e Ganhe',
           subtitle: 'Convide amigos e ganhe créditos',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
       ],
     },
@@ -110,7 +133,8 @@ export default function ProfileScreen() {
           icon: HelpCircle,
           title: 'Central de Ajuda',
           subtitle: 'FAQ e suporte técnico',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
+          onPress: () =>
+            Alert.alert('Em breve', 'Funcionalidade em desenvolvimento'),
         },
         {
           icon: LogOut,
@@ -118,14 +142,10 @@ export default function ProfileScreen() {
           subtitle: 'Encerrar sessão',
           isDestructive: true,
           onPress: () => {
-            Alert.alert(
-              'Sair da Conta',
-              'Tem certeza que deseja sair?',
-              [
-                { text: 'Cancelar', style: 'cancel' },
-                { text: 'Sair', style: 'destructive', onPress: () => {} },
-              ]
-            );
+            Alert.alert('Sair da Conta', 'Tem certeza que deseja sair?', [
+              { text: 'Cancelar', style: 'cancel' },
+              { text: 'Sair', style: 'destructive', onPress: () => {} },
+            ]);
           },
         },
       ],
@@ -140,20 +160,24 @@ export default function ProfileScreen() {
       disabled={item.hasSwitch}
     >
       <View style={styles.menuItemLeft}>
-        <View style={[
-          styles.iconContainer,
-          item.isDestructive && styles.iconContainerDestructive
-        ]}>
-          <item.icon 
-            size={20} 
-            color={item.isDestructive ? '#ef4444' : colors.primary} 
+        <View
+          style={[
+            styles.iconContainer,
+            item.isDestructive && styles.iconContainerDestructive,
+          ]}
+        >
+          <item.icon
+            size={20}
+            color={item.isDestructive ? '#ef4444' : theme.primary}
           />
         </View>
         <View style={styles.menuItemContent}>
-          <Text style={[
-            styles.menuItemTitle,
-            item.isDestructive && styles.menuItemTitleDestructive
-          ]}>
+          <Text
+            style={[
+              styles.menuItemTitle,
+              item.isDestructive && styles.menuItemTitleDestructive,
+            ]}
+          >
             {item.title}
           </Text>
           <Text style={styles.menuItemSubtitle}>{item.subtitle}</Text>
@@ -164,7 +188,7 @@ export default function ProfileScreen() {
           <Switch
             value={item.switchValue}
             onValueChange={item.onSwitchChange}
-            trackColor={{ false: '#e2e8f0', true: colors.primary }}
+            trackColor={{ false: '#e2e8f0', true: theme.primary }}
             thumbColor={'#ffffff'}
           />
         ) : (
@@ -181,7 +205,7 @@ export default function ProfileScreen() {
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
-              <User size={40} color={colors.primary} />
+              <User size={40} color={theme.primary} />
             </View>
             {userProfile.verified && (
               <View style={styles.verifiedBadge}>
@@ -189,7 +213,7 @@ export default function ProfileScreen() {
               </View>
             )}
           </View>
-          
+
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>{userProfile.name}</Text>
             <Text style={styles.profileEmail}>{userProfile.email}</Text>
@@ -230,8 +254,8 @@ export default function ProfileScreen() {
 
         {/* Informações do App */}
         <View style={styles.appInfo}>
-          <Text style={styles.appInfoText}>MotoTáxi v1.0.0</Text>
-          <Text style={styles.appInfoText}>© 2025 MotoTáxi Brasil</Text>
+          <Text style={styles.appInfoText}>MotoGo {packageJson.version}</Text>
+          <Text style={styles.appInfoText}>© 2025 Studio 3 por 1</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

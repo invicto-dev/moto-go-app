@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MapPin, Clock, Star, CreditCard, Calendar } from 'lucide-react-native';
-import { colors } from '@/constains/colors';
+import { MapPin, Clock, Star, Calendar } from 'lucide-react-native';
+import { theme } from '@/assets/theme';
 
 interface RideHistory {
   id: string;
@@ -280,8 +280,8 @@ const styles = StyleSheet.create({
     borderColor: '#e2e8f0',
   },
   filterButtonActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: theme.primary,
+    borderColor: theme.primary,
   },
   filterText: {
     fontFamily: 'Inter-Medium',
@@ -410,6 +410,6 @@ const styles = StyleSheet.create({
   fareText: {
     fontFamily: 'Inter-Bold',
     fontSize: 18,
-    color: colors.primary,
+    color: theme.primary,
   },
 });

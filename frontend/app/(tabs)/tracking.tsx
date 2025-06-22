@@ -8,8 +8,15 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MapPin, Phone, MessageSquare, Star, Navigation, Clock } from 'lucide-react-native';
-import { colors } from '@/constains/colors';
+import {
+  MapPin,
+  Phone,
+  MessageSquare,
+  Star,
+  Navigation,
+  Clock,
+} from 'lucide-react-native';
+import { theme } from '@/assets/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -41,16 +48,16 @@ export default function TrackingScreen() {
   useEffect(() => {
     const steps = [
       { status: 'searching', delay: 3000 },
-      { 
-        status: 'found', 
+      {
+        status: 'found',
         delay: 2000,
         driver: {
-          name: 'Carlos Silva',
+          name: 'Victo Hugo',
           rating: 4.9,
           vehicle: 'Honda CG 160',
           plate: 'ABC-1234',
           photo: '👨‍🦱',
-        }
+        },
       },
       { status: 'pickup', delay: 5000 },
       { status: 'ongoing', delay: 8000 },
@@ -60,12 +67,12 @@ export default function TrackingScreen() {
     if (currentStep < steps.length - 1) {
       const timer = setTimeout(() => {
         const nextStep = steps[currentStep + 1];
-        setRideStatus(prev => ({
+        setRideStatus((prev) => ({
           ...prev,
           status: nextStep.status as any,
           driver: nextStep.driver || prev.driver,
         }));
-        setCurrentStep(prev => prev + 1);
+        setCurrentStep((prev) => prev + 1);
       }, steps[currentStep].delay);
 
       return () => clearTimeout(timer);
@@ -96,7 +103,7 @@ export default function TrackingScreen() {
       case 'found':
         return '#10b981';
       case 'pickup':
-        return colors.primary;
+        return theme.primary;
       case 'ongoing':
         return '#8b5cf6';
       case 'completed':
@@ -112,13 +119,13 @@ export default function TrackingScreen() {
       'Tem certeza que deseja cancelar a corrida?',
       [
         { text: 'Não', style: 'cancel' },
-        { 
-          text: 'Sim', 
+        {
+          text: 'Sim',
           style: 'destructive',
           onPress: () => {
-            setRideStatus(prev => ({ ...prev, status: 'searching' }));
+            setRideStatus((prev) => ({ ...prev, status: 'searching' }));
             setCurrentStep(0);
-          }
+          },
         },
       ]
     );
@@ -126,21 +133,19 @@ export default function TrackingScreen() {
 
   const handleCompleteRide = () => {
     if (rideStatus.status === 'completed') {
-      Alert.alert(
-        'Avaliar Corrida',
-        'Como foi sua experiência?',
-        [
-          { text: 'Depois', style: 'cancel' },
-          { text: 'Avaliar', onPress: () => {} },
-        ]
-      );
+      Alert.alert('Avaliar Corrida', 'Como foi sua experiência?', [
+        { text: 'Depois', style: 'cancel' },
+        { text: 'Avaliar', onPress: () => {} },
+      ]);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Status Header */}
-      <View style={[styles.statusHeader, { backgroundColor: getStatusColor() }]}>
+      <View
+        style={[styles.statusHeader, { backgroundColor: getStatusColor() }]}
+      >
         <Text style={styles.statusText}>{getStatusText()}</Text>
         <View style={styles.statusIndicator}>
           <View style={[styles.statusDot, { backgroundColor: '#ffffff' }]} />
@@ -150,12 +155,14 @@ export default function TrackingScreen() {
       {/* Mapa de Rastreamento */}
       <View style={styles.mapContainer}>
         <View style={styles.mapPlaceholder}>
-          <Navigation size={60} color={colors.primary} />
+          <Navigation size={60} color={theme.primary} />
           <Text style={styles.mapTitle}>Rastreamento em Tempo Real</Text>
           <Text style={styles.mapSubtitle}>
-            {rideStatus.status === 'ongoing' ? 'Você está a caminho!' : 'Localização atualizada'}
+            {rideStatus.status === 'ongoing'
+              ? 'Você está a caminho!'
+              : 'Localização atualizada'}
           </Text>
-          
+
           {/* Informações da Rota */}
           <View style={styles.routeInfo}>
             <View style={styles.routeItem}>
@@ -186,14 +193,14 @@ export default function TrackingScreen() {
             </View>
             <View style={styles.driverActions}>
               <TouchableOpacity style={styles.actionButton}>
-                <Phone size={20} color={colors.primary} />
+                <Phone size={20} color={theme.primary} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton}>
-                <MessageSquare size={20} color={colors.primary} />
+                <MessageSquare size={20} color={theme.primary} />
               </TouchableOpacity>
             </View>
           </View>
-          
+
           <View style={styles.vehicleInfo}>
             <Text style={styles.vehicleText}>{rideStatus.driver.vehicle}</Text>
             <Text style={styles.plateText}>{rideStatus.driver.plate}</Text>
@@ -207,14 +214,14 @@ export default function TrackingScreen() {
           <Text style={styles.tripLabel}>Tarifa:</Text>
           <Text style={styles.tripValue}>{rideStatus.fare}</Text>
         </View>
-        
+
         {rideStatus.status === 'pickup' && (
           <View style={styles.tripRow}>
             <Text style={styles.tripLabel}>Chegada em:</Text>
             <Text style={styles.tripValue}>3-5 min</Text>
           </View>
         )}
-        
+
         {rideStatus.status === 'ongoing' && (
           <View style={styles.tripRow}>
             <Text style={styles.tripLabel}>Tempo restante:</Text>
@@ -226,14 +233,14 @@ export default function TrackingScreen() {
       {/* Botões de Ação */}
       <View style={styles.actionButtons}>
         {rideStatus.status === 'completed' ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.primaryButton}
             onPress={handleCompleteRide}
           >
             <Text style={styles.primaryButtonText}>Avaliar Corrida</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.cancelButton}
             onPress={handleCancelRide}
           >
@@ -386,7 +393,7 @@ const styles = StyleSheet.create({
   plateText: {
     fontFamily: 'Inter-Bold',
     fontSize: 16,
-    color: colors.primary,
+    color: theme.primary,
   },
   tripInfo: {
     backgroundColor: '#ffffff',

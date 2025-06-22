@@ -10,8 +10,16 @@ import {
   Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MapPin, Navigation, Clock, CreditCard } from 'lucide-react-native';
-import { colors } from '@/constains/colors';
+import {
+  Banknote,
+  CreditCard,
+  MapPin,
+  Navigation,
+  Smartphone,
+} from 'lucide-react-native';
+import { theme } from '@/assets/theme';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import AutocompleteInput from '@/components/AutoCompletInput';
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,6 +31,7 @@ interface RideRequest {
 }
 
 export default function HomeScreen() {
+  const API_KEY = 'AIzaSyDYOCGx7fPk7zhZoyseAOq-tSaxdFYSU4Y';
   const [rideRequest, setRideRequest] = useState<RideRequest>({
     origin: '',
     destination: '',
@@ -38,16 +47,38 @@ export default function HomeScreen() {
     }
 
     setIsRequestingRide(true);
-    
-    // Simular requisição
-    setTimeout(() => {
-      setIsRequestingRide(false);
-      Alert.alert(
-        'Corrida Solicitada!',
-        'Encontrando um motociclista próximo...',
-        [{ text: 'OK' }]
-      );
-    }, 2000);
+
+    try {
+      const response = await fetch('http://localhost:3001/rides', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rideRequest),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao solicitar corrida');
+      }
+
+      const data = await response.json();
+
+      console.log('Dados da solicitação de corrida:', data);
+
+      if (data.success && data.driverFound) {
+        Alert.alert(
+          'Motorista encontrado!',
+          `🧑‍✈️ ${data.driver.name}\n🏍️ ${data.driver.moto}\n📍 Chega em ${data.estimatedArrival}`
+        );
+      } else {
+        Alert.alert('Nenhum motorista disponível no momento');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro', 'Não foi possível solicitar a corrida.');
+    }
+
+    setIsRequestingRide(false);
   };
 
   const rideTypes = [
@@ -68,9 +99,9 @@ export default function HomeScreen() {
   ];
 
   const paymentMethods = [
-    { id: 'card', name: 'Cartão', icon: '💳' },
-    { id: 'cash', name: 'Dinheiro', icon: '💵' },
-    { id: 'pix', name: 'PIX', icon: '📱' },
+    { id: 'pix', name: 'PIX', icon: <Smartphone /> },
+    { id: 'cash', name: 'Dinheiro', icon: <Banknote /> },
+    { id: 'card', name: 'Cartão', icon: <CreditCard />, disabled: true },
   ];
 
   return (
@@ -85,7 +116,7 @@ export default function HomeScreen() {
         {/* Mapa Simulado */}
         <View style={styles.mapContainer}>
           <View style={styles.mapPlaceholder}>
-            <Navigation size={40} color={colors.primary} />
+            <Navigation size={40} color={theme.primary} />
             <Text style={styles.mapText}>Mapa de Oriximiná</Text>
             <Text style={styles.mapSubtext}>Localização atual detectada</Text>
           </View>
@@ -95,26 +126,30 @@ export default function HomeScreen() {
         <View style={styles.rideForm}>
           <View style={styles.locationInputs}>
             <View style={styles.inputGroup}>
-              <MapPin size={20} color="#10b981" />
-              <TextInput
-                style={styles.input}
+              <AutocompleteInput
                 placeholder="De onde você está saindo?"
-                value={rideRequest.origin}
-                onChangeText={(text) => setRideRequest(prev => ({ ...prev, origin: text }))}
-                placeholderTextColor="#64748b"
+                onPlaceSelected={(place) => {
+                  console.log(place);
+                  setRideRequest((prev) => ({
+                    ...prev,
+                    origin: place.description,
+                  }));
+                }}
               />
             </View>
-            
+
             <View style={styles.divider} />
-            
+
             <View style={styles.inputGroup}>
-              <MapPin size={20} color="#ef4444" />
-              <TextInput
-                style={styles.input}
+              <AutocompleteInput
                 placeholder="Para onde você vai?"
-                value={rideRequest.destination}
-                onChangeText={(text) => setRideRequest(prev => ({ ...prev, destination: text }))}
-                placeholderTextColor="#64748b"
+                onPlaceSelected={(place) => {
+                  console.log(place);
+                  setRideRequest((prev) => ({
+                    ...prev,
+                    destination: place.description,
+                  }));
+                }}
               />
             </View>
           </View>
@@ -129,11 +164,18 @@ export default function HomeScreen() {
                   styles.rideTypeCard,
                   rideRequest.rideType === type.id && styles.rideTypeCardActive,
                 ]}
-                onPress={() => setRideRequest(prev => ({ ...prev, rideType: type.id as 'standard' | 'premium' }))}
+                onPress={() =>
+                  setRideRequest((prev) => ({
+                    ...prev,
+                    rideType: type.id as 'standard' | 'premium',
+                  }))
+                }
               >
                 <View style={styles.rideTypeInfo}>
                   <Text style={styles.rideTypeName}>{type.name}</Text>
-                  <Text style={styles.rideTypeDescription}>{type.description}</Text>
+                  <Text style={styles.rideTypeDescription}>
+                    {type.description}
+                  </Text>
                 </View>
                 <View style={styles.rideTypeDetails}>
                   <Text style={styles.rideTypePrice}>{type.price}</Text>
@@ -152,9 +194,15 @@ export default function HomeScreen() {
                   key={method.id}
                   style={[
                     styles.paymentMethod,
-                    rideRequest.paymentMethod === method.id && styles.paymentMethodActive,
+                    rideRequest.paymentMethod === method.id &&
+                      styles.paymentMethodActive,
                   ]}
-                  onPress={() => setRideRequest(prev => ({ ...prev, paymentMethod: method.id as 'card' | 'cash' | 'pix' }))}
+                  onPress={() =>
+                    setRideRequest((prev) => ({
+                      ...prev,
+                      paymentMethod: method.id as 'card' | 'cash' | 'pix',
+                    }))
+                  }
                 >
                   <Text style={styles.paymentIcon}>{method.icon}</Text>
                   <Text style={styles.paymentText}>{method.name}</Text>
@@ -165,12 +213,17 @@ export default function HomeScreen() {
 
           {/* Botão de Solicitar */}
           <TouchableOpacity
-            style={[styles.requestButton, isRequestingRide && styles.requestButtonLoading]}
+            style={[
+              styles.requestButton,
+              isRequestingRide && styles.requestButtonLoading,
+            ]}
             onPress={handleRequestRide}
             disabled={isRequestingRide}
           >
             <Text style={styles.requestButtonText}>
-              {isRequestingRide ? 'Procurando motorista...' : 'Solicitar Corrida'}
+              {isRequestingRide
+                ? 'Procurando motorista...'
+                : 'Solicitar Corrida'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -285,7 +338,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   rideTypeCardActive: {
-    borderColor: colors.primary,
+    borderColor: theme.primary,
     backgroundColor: '#eff6ff',
   },
   rideTypeInfo: {
@@ -308,7 +361,7 @@ const styles = StyleSheet.create({
   rideTypePrice: {
     fontFamily: 'Inter-Bold',
     fontSize: 18,
-    color: colors.primary,
+    color: theme.primary,
   },
   rideTypeTime: {
     fontFamily: 'Inter-Regular',
@@ -336,7 +389,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   paymentMethodActive: {
-    borderColor: colors.primary,
+    borderColor: theme.primary,
     backgroundColor: '#eff6ff',
   },
   paymentIcon: {
@@ -349,13 +402,13 @@ const styles = StyleSheet.create({
     color: '#1e293b',
   },
   requestButton: {
-    backgroundColor: colors.primary,
+    backgroundColor: theme.primary,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginTop: 12,
     elevation: 4,
-    shadowColor: colors.primary,
+    shadowColor: theme.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
